@@ -1,4 +1,3 @@
-# Use Ubuntu as the base image
 FROM ubuntu:latest
 
 # Set environment variables
@@ -23,5 +22,4 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 # Expose the port for code-server
 EXPOSE 8080
 
-# Set the entrypoint to run code-server
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]

@@ -3,7 +3,7 @@ FROM alpine:latest
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CODE_VERSION="4.17.0"
+
 
 # Install necessary packages
 RUN apk update && apk add --no-cache \
@@ -21,7 +21,7 @@ RUN apk update && apk add --no-cache \
     ca-certificates
 
 # Install code-server
-RUN curl -fsSL https://github.com/coder/code-server/releases/download/v${CODE_VERSION}/code-server-${CODE_VERSION}-linux-arm64.tar.gz | tar -xz -C /usr/local/bin --strip-components=1
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Expose the port
 EXPOSE 8080

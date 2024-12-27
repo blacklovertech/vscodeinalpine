@@ -1,3 +1,4 @@
+# Use Ubuntu as the base image
 FROM ubuntu:latest
 
 # Set environment variables
@@ -24,5 +25,8 @@ EXPOSE 8080
 
 # Install any other dependencies, if needed, after code-server installation
 
-# Use CMD to start code-server without specifying /workspace and enable authentication
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password", "--password", "Maha0508"]
+# Copy the custom config file (set password) into the container
+COPY config.yaml /root/.config/code-server/config.yaml
+
+# Set the entrypoint to run code-server
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password"]

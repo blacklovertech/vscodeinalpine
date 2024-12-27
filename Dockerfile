@@ -1,32 +1,42 @@
-# Use Ubuntu as the base image
-FROM ubuntu:latest
+# Start from the code-server Debian base image
+FROM codercom/code-server:4.9.0
 
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
+USER coder
 
-# Update and install necessary packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash \
-    curl \
-    git \
-    python3 \
-    python3-pip \
-    build-essential \
-    nodejs \
-    npm \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Apply VS Code settings
+COPY deploy-container/settings.json .local/share/code-server/User/settings.json
 
-# Install code-server using the official script
-RUN curl -fsSL https://code-server.dev/install.sh | sh
+# Use bash shell
+ENV SHELL=/bin/bash
 
-# Expose the port for code-server
-EXPOSE 8080
+# Install unzip + rclone (support for remote filesystem)
+RUN sudo apt-get update && sudo apt-get install unzip -y
+RUN curl https://rclone.org/install.sh | sudo bash
 
-# Install any other dependencies, if needed, after code-server installation
+# Copy rclone tasks to /tmp, to potentially be used
+COPY deploy-container/rclone-tasks.json /tmp/rclone-tasks.json
 
-# Copy the custom config file (set password) into the container
-COPY config.yaml /root/.config/code-server/config.yaml
+# Fix permissions for code-server
+RUN sudo chown -R coder:coder /home/coder/.local
 
-# Set the entrypoint to run code-server
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password"]
+# You can add custom software and dependencies for your environment below
+# -----------
+
+# Install a VS Code extension:
+# Note: we use a different marketplace than VS Code. See https://github.com/cdr/code-server/blob/main/docs/FAQ.md#differences-compared-to-vs-code
+RUN code-server --install-extension esbenp.prettier-vscode
+
+# Install apt packages:
+RUN sudo apt-get install -y ubuntu-make
+
+# Copy files: 
+# COPY deploy-container/myTool /home/coder/myTool
+
+# -----------
+
+# Port
+ENV PORT=8080
+
+# Use our custom entrypoint script first
+COPY deploy-container/entrypoint.sh /usr/bin/deploy-container-entrypoint.sh
+ENTRYPOINT ["/usr/bin/deploy-container-entrypoint.sh"]

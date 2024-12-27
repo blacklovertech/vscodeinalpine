@@ -37,6 +37,12 @@ RUN code-server --install-extension esbenp.prettier-vscode
 # Port
 ENV PORT=8080
 
+
 # Use our custom entrypoint script first
 COPY deploy-container/entrypoint.sh /usr/bin/deploy-container-entrypoint.sh
 ENTRYPOINT ["/usr/bin/deploy-container-entrypoint.sh"]
+
+# Echo the config.yaml path and password
+RUN echo "The config file is located at: ~/.config/code-server/config.yaml" && \
+    echo "The password is set in the config.yaml file" && \
+    cat ~/.config/code-server/config.yaml | grep -i 'password' || echo "Password not found"

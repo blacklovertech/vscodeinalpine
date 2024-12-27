@@ -37,7 +37,7 @@ RUN code-server --install-extension esbenp.prettier-vscode
 # Port
 ENV PORT=8080
 
-COPY config.yaml /root/.config/code-server/config.yaml
+COPY config.yaml ~/.config/code-server/config.yaml
 
 
 # Use our custom entrypoint script first

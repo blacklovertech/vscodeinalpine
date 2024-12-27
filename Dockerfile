@@ -31,4 +31,3 @@ WORKDIR /workspace
 
 # Use CMD to start code-server (instead of ENTRYPOINT)
 CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "none", "/workspace"]
-v

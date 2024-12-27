@@ -1,3 +1,4 @@
+# Use Ubuntu as the base image
 FROM ubuntu:latest
 
 # Set environment variables
@@ -22,4 +23,10 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 # Expose the port for code-server
 EXPOSE 8080
 
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]
+# Install any other dependencies, if needed, after code-server installation
+
+# Copy the custom config file (set password) into the container
+COPY config.yaml /root/.config/code-server/config.yaml
+
+# Set the entrypoint to run code-server
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password"]

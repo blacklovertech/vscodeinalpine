@@ -29,4 +29,4 @@ EXPOSE 8080
 COPY config.yaml /root/.config/code-server/config.yaml
 
 # Set the entrypoint to run code-server
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password"]
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080"]

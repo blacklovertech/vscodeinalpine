@@ -23,11 +23,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 # Expose the port for code-server
 EXPOSE 8080
 
-# Create a workspace directory
-RUN mkdir -p /workspace
-WORKDIR /workspace
-
 # Install any other dependencies, if needed, after code-server installation
 
-# Use CMD to start code-server (instead of ENTRYPOINT)
-CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "none", "/workspace"]
+# Use CMD to start code-server without specifying /workspace and enable authentication
+CMD ["code-server", "--bind-addr", "0.0.0.0:8080", "--auth", "password", "--password", "Maha0508"]
